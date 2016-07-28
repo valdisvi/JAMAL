@@ -20,7 +20,7 @@ Project was delivered using Eclipse, and its source code is naturally compatible
 
 4. Added restart server options that allows client to stop and start server with new settings remotely.
 
-5.Server now can exchange client cut text with _JAMAL_ client.
+5. Server now can exchange client cut text with _JAMAL_ client.
 
 6. Now it is possible to add optional server password. Everyone connecting to will have to provide valid password
 
