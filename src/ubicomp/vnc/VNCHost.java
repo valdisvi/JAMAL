@@ -62,6 +62,7 @@ public class VNCHost {
                 mRFBHost = new RFBHost(display, displayName, serverClass, width,
                         height, new DefaultRFBAuthenticator(password,
                                 restrictedTo, noPasswordFor));
+                mRFBHost.setUp();
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             }

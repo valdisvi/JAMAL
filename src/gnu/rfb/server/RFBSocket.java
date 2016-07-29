@@ -20,6 +20,8 @@ import java.util.List;
 
 import ubicomp.rfb.server.RFBAuthenticator;
 
+
+
 /**
  * Standard RFB client model using a simple {@link java.net.Socket}.
  **/
@@ -77,6 +79,7 @@ public class RFBSocket implements RFBClient, Runnable {
     private int preferredEncoding = rfb.EncodingHextile;
 
     boolean authComplete = false;
+    private String name = " ";
 
     public RFBSocket(Socket socket, Constructor<?> constructor,
             Object[] constructorArgs, RFBHost host,
@@ -87,15 +90,21 @@ public class RFBSocket implements RFBClient, Runnable {
     public RFBSocket(Socket socket, Constructor<?> constructor,
             Object[] constructorArgs, RFBHost host,
             RFBAuthenticator authenticator, boolean v38) throws IOException {
-        System.out.println("Creating new socket for : " + socket.getInetAddress().getHostAddress());
+       // System.out.println("Creating new socket for : " + socket.getInetAddress().getHostAddress());
         this.socket = socket;
         this.constructor = constructor;
         this.constructorArgs = constructorArgs;
         this.host = host;
         this.authenticator = authenticator;
 
+        System.out.println("te");
+        try{
         isLocal = socket.getLocalAddress().equals(socket.getInetAddress());
-
+        name =  socket.getInetAddress().getHostAddress();
+        }
+        catch(Exception e){
+            isLocal=false;
+        }
         // Streams
         input = new DataInputStream(
                 new BufferedInputStream(socket.getInputStream()));
@@ -105,18 +114,25 @@ public class RFBSocket implements RFBClient, Runnable {
         this.v38 = v38;
 
         socketList.add(socket);
+        
 
+
+
+    }
+    
+    public void setup(){
         if (!GUI.getGui().isEmpty()) {
             GUI.getGui().get(0).setText(socketList);
         }
 
         // Start socket listener thread
         new Thread(this,
-                "RFBSocket-" + socket.getInetAddress().getHostAddress())
+                "RFBSocket-" + name)
                         .start();
+
         while(!authComplete)
             try {
-                Thread.sleep(500);
+                Thread.sleep(800);
             } catch (InterruptedException e) {
 
                 e.printStackTrace();
@@ -127,13 +143,15 @@ public class RFBSocket implements RFBClient, Runnable {
         cilpboardlistener= new Thread(new CilpboardListener(this));
         cilpboardlistener.start();
         }
+        
     }
 
     @Override
     public synchronized void close() throws IOException {
-        System.out.println("Closing client socket for : " + socket.getInetAddress().getHostAddress());
+        System.out.println("Closing client socket for : " + name);
         socketList.remove(socket);
         socket.close(); 
+        stop();
         if (!GUI.getGui().isEmpty()) {
             GUI.getGui().get(0).setText(socketList);
         }
@@ -215,6 +233,10 @@ public class RFBSocket implements RFBClient, Runnable {
         server.setShared(this, shared);
     }
 
+    /**
+     * 
+     * 
+     */
     @Override
     public synchronized void read(byte bytes[]) throws IOException {
         input.readFully(bytes);
@@ -262,6 +284,7 @@ public class RFBSocket implements RFBClient, Runnable {
 
     private synchronized void readKeyEvent() throws IOException {
         boolean down = (input.readUnsignedByte() == 1);
+        System.out.println(down);
         input.readUnsignedShort(); // padding
         int key = input.readInt();
 
@@ -322,6 +345,7 @@ public class RFBSocket implements RFBClient, Runnable {
             authenticator.setVersion(v38);
 
             if (!authenticator.authenticate(this)){
+                System.out.println("nezina paroli");
                 mRunning = false;
                 authComplete = true;
                 close();
@@ -367,8 +391,6 @@ public class RFBSocket implements RFBClient, Runnable {
                     break;
                 case rfb.ClientCutText:
                     readClientCutText();
-                    System.out.println(
-                            "Copied clipboard content from client to server");//MYCODE
                     break;
                 default:
                     System.err.println(b);
@@ -527,6 +549,7 @@ public class RFBSocket implements RFBClient, Runnable {
     @SuppressWarnings("deprecation")
     public synchronized void stop() {
         mRunning = false;
+        authComplete=true;
         try{
         cilpboardlistener.stop();
         }
@@ -534,4 +557,38 @@ public class RFBSocket implements RFBClient, Runnable {
             
         }
     }
+    
+    
+    public void readInput() throws IOException{
+        int b = input.readUnsignedByte();
+        switch (b) {
+        case rfb.SetPixelFormat:
+            readSetPixelFormat();
+            break;
+        case rfb.FixColourMapEntries:
+            readFixColourMapEntries();
+            break;
+        case rfb.SetEncodings:
+            readSetEncodings();
+            break;
+        case rfb.FrameBufferUpdateRequest:
+            readFrameBufferUpdateRequest();
+            break;
+        case rfb.KeyEvent:
+            readKeyEvent();
+            break;
+        case rfb.PointerEvent:
+            readPointerEvent();
+            break;
+        case rfb.ClientCutText:
+            readClientCutText();
+            break;
+        default:
+            System.err.println(b);
+        }
+    }
+    public void addServer(RFBServer server){
+        this.server=server;
+    }
+    
 }

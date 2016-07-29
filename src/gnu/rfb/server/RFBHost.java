@@ -68,6 +68,10 @@ public class RFBHost implements Runnable {
         mSockets = new HashSet<RFBSocket>();
 
         // Start listener thread
+
+    }
+    
+    public void setUp(){
         System.out.println("Starting host thread");
         mThread = new Thread(this, "RFBHost-" + display);
         mThread.start();
@@ -88,10 +92,13 @@ public class RFBHost implements Runnable {
 
                 // Create client for each connected socket
                 //new RFBSocket( serverSocket.accept(), (RFBServer) constructor.newInstance( new Object[] { new Integer( display ), displayName } ) );
-                mSockets.add(new RFBSocket(serverSocket.accept(), constructor,
-                        new Object[] { new Integer(display), displayName,
+                RFBSocket tmp =new RFBSocket(serverSocket.accept(), constructor,
+                                new Object[] { new Integer(display), displayName,
                                 new Integer(width), new Integer(height) },
-                        this, authenticator));
+                                this, authenticator);
+                
+                mSockets.add(tmp);
+                tmp.setup();
 
             }
         } catch (IOException x) {

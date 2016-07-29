@@ -155,7 +155,7 @@ public class DefaultRFBAuthenticator implements RFBAuthenticator {
         }
 
         // Compare ciphers
-        System.out.println("ac" + expectedResult.length);
+
         if (expectedResult != null && Arrays.equals(expectedResult, response)) {
             client.writeSecurityResult(true, "");
             return true;

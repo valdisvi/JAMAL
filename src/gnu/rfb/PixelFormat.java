@@ -7,6 +7,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.ByteBuffer;
 
 /**
  * RFB pixel format information.
@@ -186,5 +187,22 @@ public class PixelFormat {
         output.writeByte(redShift);
         output.writeByte(greenShift);
         output.writeByte(blueShift);
+    }
+    
+    public byte[] toByteArray(){
+        ByteBuffer buffer =  ByteBuffer.allocate(13);
+        
+        buffer.put((byte)bitsPerPixel);
+        buffer.put((byte)depth);
+        buffer.put((byte) (bigEndian ? 1 : 0));
+        buffer.put((byte) (trueColour ? 1 : 0));
+        buffer.putShort((short)redMax);
+        buffer.putShort((short)greenMax);
+        buffer.putShort((short)blueMax);
+        buffer.put((byte)redShift);
+        buffer.put((byte)greenShift);
+        buffer.put((byte)blueShift);
+        
+        return buffer.array();
     }
 }
