@@ -76,7 +76,7 @@ public class ConnectionView extends JPanel implements View {
     public ConnectionView(final WindowListener appWindowListener,
             final ConnectionPresenter presenter, boolean useSsh) {
         this.appWindowListener = appWindowListener;
-        this.hasSshSupport = useSsh;
+        this.hasSshSupport = false;
         this.presenter = presenter;
 
         setLayout(new BorderLayout(0, 0));
@@ -316,7 +316,7 @@ public class ConnectionView extends JPanel implements View {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 final boolean useSsh = e.getStateChange() == ItemEvent.SELECTED;
-                setUseSsh(useSsh);
+                setUseSsh(useSsh); 
                 presenter.setUseSsh(useSsh);
             }
         });
@@ -369,7 +369,7 @@ public class ConnectionView extends JPanel implements View {
     @SuppressWarnings("UnusedDeclaration")
     public void setSshHostName(String sshHostName) {
         if (hasSshSupport) {
-            sshHostField.setText(sshHostName);
+           sshHostField.setText(sshHostName);//FOR SSH
         }
     }
 
@@ -382,7 +382,7 @@ public class ConnectionView extends JPanel implements View {
         }
     }
 
-    @SuppressWarnings("UnusedDeclaration")
+    @SuppressWarnings("UnusedDeclaration") //FOR SSH
     public void setSshPortNumber(int sshPortNumber) {
         if (hasSshSupport) {
             sshPortField.setText(String.valueOf(sshPortNumber));
@@ -401,7 +401,7 @@ public class ConnectionView extends JPanel implements View {
     @SuppressWarnings("UnusedDeclaration")
     public void setSshUserName(String sshUserName) {
         if (hasSshSupport) {
-            sshUserField.setText(sshUserName);
+            sshUserField.setText(sshUserName);//FOR SSH
         }
     }
 
@@ -414,10 +414,10 @@ public class ConnectionView extends JPanel implements View {
         }
     }
 
-    @SuppressWarnings("UnusedDeclaration")
+    @SuppressWarnings("UnusedDeclaration")//FOR SSH
     public void setUseSsh(boolean useSsh) {
         if (hasSshSupport) {
-            useSshTunnelingCheckbox.setSelected(useSsh);
+            useSshTunnelingCheckbox.setSelected(useSsh); 
             sshUserLabel.setEnabled(useSsh);
             sshUserField.setEnabled(useSsh);
             ssUserWarningLabel.setEnabled(useSsh);

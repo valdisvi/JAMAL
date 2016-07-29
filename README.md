@@ -44,3 +44,7 @@ Project is developed in Eclipse, and its source code is naturally compatible wit
 2. Frame rate is bearable but still leaves room for improvement. To solve that issue implementation of optimized implementation, dependent on operating system is needed. (Probably hardware support from Oracle FX. 
 
 3. Mouse input currently doesn't support multiple buttons pressed at the same time.
+
+4. Dead keys aren't passed. Current workaround will be using layout that doesn't use them on client side.
+
+5. Very specific issue with not properly working Latvian (Modern) Layout if it is turned on both sides. Current workaround is choosing other layout on client side.
