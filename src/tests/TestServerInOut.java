@@ -81,7 +81,7 @@ public class TestServerInOut{
         
         client.addServer(server);
                 
-        System.out.println("tests set up done!");
+       
 
 
     }
@@ -133,7 +133,7 @@ public class TestServerInOut{
     
     @Test
     public void C_testReadClientCutText() throws Exception{
-        System.out.println("testCut text");
+       
         client.readInput();
         String data = (String) Toolkit.getDefaultToolkit()
                 .getSystemClipboard().getData(DataFlavor.stringFlavor); 
@@ -142,7 +142,7 @@ public class TestServerInOut{
     
     @Test
     public void D_testReadClientKeyEvent() throws Exception{
-        System.out.println("testing KeyEvents");
+     
         
         client.readInput();
 
@@ -154,7 +154,7 @@ public class TestServerInOut{
 
     @Test
     public void E_testReadMouseEvent() throws Exception{
-        System.out.println("testing MouseEvents");       
+       
         for(int i=0;i<3;i++){
         client.readInput();
         Thread.sleep(50);

@@ -144,7 +144,7 @@ public class DefaultRFBAuthenticator implements RFBAuthenticator {
                     256);
             SecretKey tmp = factory.generateSecret(spec);
             SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
-            System.out.println("SecretKey" + secret.getEncoded());
+
             AESencryption = Cipher.getInstance("AES/CBC/PKCS5Padding");
             AESencryption.init(Cipher.ENCRYPT_MODE, secret,
                     new IvParameterSpec(IV));

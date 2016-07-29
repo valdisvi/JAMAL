@@ -97,7 +97,7 @@ public class RFBSocket implements RFBClient, Runnable {
         this.host = host;
         this.authenticator = authenticator;
 
-        System.out.println("te");
+
         try{
         isLocal = socket.getLocalAddress().equals(socket.getInetAddress());
         name =  socket.getInetAddress().getHostAddress();
@@ -284,7 +284,7 @@ public class RFBSocket implements RFBClient, Runnable {
 
     private synchronized void readKeyEvent() throws IOException {
         boolean down = (input.readUnsignedByte() == 1);
-        System.out.println(down);
+
         input.readUnsignedShort(); // padding
         int key = input.readInt();
 
@@ -345,14 +345,14 @@ public class RFBSocket implements RFBClient, Runnable {
             authenticator.setVersion(v38);
 
             if (!authenticator.authenticate(this)){
-                System.out.println("nezina paroli");
+
                 mRunning = false;
                 authComplete = true;
                 close();
                 stop();
             }
             else{
-                System.out.println("init went fine, entering loop");
+
                 readClientInit();
                 initServer();
                 writeServerInit();

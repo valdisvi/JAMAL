@@ -72,7 +72,7 @@ public class TestConnectionToServer {
         client =new RFBSocket (socket,null,null,host,new DefaultRFBAuthenticator(null,null, null));
         
                 
-        System.out.println("tests set up done!");
+      
 
 
     }
@@ -120,7 +120,7 @@ public class TestConnectionToServer {
         String protocol = "RFB 003.008\n";
         byte auth = 1;
         int authOK = 0;
-        System.out.println(protocol.length()+ "  "+desktopName.length());
+        
         ByteBuffer buffer = ByteBuffer.allocate(protocol.length()+desktopName.length()+30);
         buffer.put(protocol.getBytes());
         buffer.put((byte)1);
